@@ -4,7 +4,7 @@
 
 CodeMind AI is a professional developer platform designed to analyze repositories, perform RAG-powered codebase Q&A with citations, review code, identify issues, and generate tests and documentation.
 
-> **Phase 2 — Authentication & Authorization**: PostgreSQL-backed accounts, Argon2id password hashing, short-lived JWTs, rotating refresh-token sessions, CSRF-protected cookies, and protected dashboard routes.
+> **Phase 3 — Repository Management**: Authenticated CRUD for user repositories, unique per-owner names, deterministic pagination, metadata editing, multi-tenant isolation, and responsive light UI with modals and search.
 
 ---
 
@@ -99,6 +99,16 @@ The test setup refuses any `TEST_DATABASE_URL` whose database name does not end 
 - Cookie-based refresh and logout require an allowed `Origin` and matching `cm_csrf` cookie / `X-CSRF-Token` header. The CSRF value is bound to the stored refresh session. Refresh calls are single-flight in the frontend and an expired access-token request is retried at most once.
 - Deploy the frontend and API through a same-origin reverse proxy (as Vite does locally) so the frontend can read the CSRF cookie. Configure `CORS_ORIGINS` with the exact browser origin.
 - See [Authentication API](./docs/api/authentication.md) for endpoint contracts, [authentication flow](./docs/architecture/authentication.md) for the sequence diagram, and [ADR-002](./docs/decisions/ADR-002-authentication-tokens.md) for the token/cookie decision.
+
+## Repository Management (Phase 3)
+
+- All repository endpoints (`/api/v1/repositories`) require bearer authentication (`requireAuth`).
+- Strict multi-tenant isolation: repositories are bound to `ownerId` derived directly from the authenticated token.
+- Inaccessible or non-existent repositories return a generic `404 REPOSITORY_NOT_FOUND` to prevent ownership enumeration.
+- Duplicate repository names for the same owner return `409 REPOSITORY_EXISTS`. Distinct users can register repositories with the same name.
+- Pagination supports `page`, `limit` (max 100), and `search` query parameters with deterministic ordering (`createdAt DESC, id DESC`).
+- Live frontend management under `/repositories` includes search filtering, empty states, creation modals, metadata editing, and deletion confirmation dialogs.
+- See [Repository Management API](./docs/api/repositories.md) for full endpoint contracts and payload schemas.
 
 ### Prisma commands
 
