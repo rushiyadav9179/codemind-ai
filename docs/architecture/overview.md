@@ -17,6 +17,8 @@ graph TB
         LOG[Pino Logger]
         VAL[Zod Validation]
         ERR[Error Handler]
+        AUTH[Auth Middleware and Session Service]
+        REPO[Prisma Repositories]
         HC[Health Controller]
         HS[Health Service]
     end
@@ -37,7 +39,8 @@ graph TB
     EX --> HC
     HC --> HS
     EX --> ERR
-    API -.->|Phase 2| PG
+    AUTH --> REPO
+    REPO --> PG
     API -.->|Phase N| RD
     TYPES -.->|import type| UI
     TYPES -.->|import type| API

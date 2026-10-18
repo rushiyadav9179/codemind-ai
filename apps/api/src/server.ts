@@ -1,6 +1,7 @@
 import { createApp } from './app';
 import { env } from './config/env';
 import { logger } from './middleware/requestLogger';
+import { prisma } from './lib/prisma';
 
 const app = createApp();
 
@@ -21,11 +22,27 @@ const shutdown = (signal: string) => {
 
   server.close((err) => {
     if (err) {
-      logger.error({ err }, 'Error during server close');
+      logger.error(
+        { errorName: err instanceof Error ? err.name : 'UnknownError' },
+        'Error during server close',
+      );
       process.exit(1);
     }
-    logger.info('HTTP server closed. Goodbye.');
-    process.exit(0);
+    prisma
+      .$disconnect()
+      .then(() => {
+        logger.info('HTTP server and database connections closed. Goodbye.');
+        process.exit(0);
+      })
+      .catch((disconnectError: unknown) => {
+        logger.error(
+          {
+            errorName: disconnectError instanceof Error ? disconnectError.name : 'UnknownError',
+          },
+          'Error while closing database connections',
+        );
+        process.exit(1);
+      });
   });
 
   setTimeout(() => {
@@ -38,7 +55,10 @@ process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));
 
 process.on('unhandledRejection', (reason) => {
-  logger.error({ reason }, 'Unhandled Promise rejection');
+  logger.error(
+    { errorName: reason instanceof Error ? reason.name : 'UnknownError' },
+    'Unhandled Promise rejection',
+  );
   process.exit(1);
 });
 

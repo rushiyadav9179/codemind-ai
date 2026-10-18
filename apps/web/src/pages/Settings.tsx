@@ -39,7 +39,9 @@ export function Settings() {
               <p className="text-sm font-semibold text-slate-850">Milestone</p>
               <p className="text-xs text-slate-500">Current implementation track</p>
             </div>
-            <span className="badge-coming-soon">Phase 1 — Project Foundation</span>
+            <span className="badge-status-healthy">
+              Phase 2 — Authentication &amp; Authorization
+            </span>
           </div>
 
           <div className="py-3.5 flex items-center justify-between">
@@ -60,10 +62,10 @@ export function Settings() {
           <Info className="h-4 w-4" aria-hidden="true" />
         </div>
         <div>
-          <p className="text-sm font-semibold text-slate-850 mb-0.5">Looking ahead to Phase 2</p>
+          <p className="text-sm font-semibold text-slate-850 mb-0.5">Looking ahead</p>
           <p className="text-xs text-slate-600 leading-relaxed">
-            GitHub OAuth application keys, local Ollama runtime model selectors (Llama 3, Mistral),
-            and vector chunking configurations will be manageable here in subsequent phases.
+            Repository connections, local model runtime settings, and codebase indexing options are
+            planned for future phases.
           </p>
         </div>
       </div>

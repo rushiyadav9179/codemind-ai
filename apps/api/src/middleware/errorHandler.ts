@@ -51,7 +51,7 @@ export const errorHandler: ErrorRequestHandler = (
     return;
   }
 
-  logger.error({ err }, 'Unhandled error');
+  logger.error({ errorName: err instanceof Error ? err.name : 'UnknownError' }, 'Unhandled error');
 
   const body: ApiError = {
     success: false,
