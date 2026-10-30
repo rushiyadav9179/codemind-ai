@@ -39,7 +39,7 @@ export function Settings() {
               <p className="text-sm font-semibold text-slate-850">Milestone</p>
               <p className="text-xs text-slate-500">Current implementation track</p>
             </div>
-            <span className="badge-status-healthy">Phase 3 — Repository Management</span>
+            <span className="badge-status-healthy">Phase 4 — Code Intelligence Engine</span>
           </div>
 
           <div className="py-3.5 flex items-center justify-between">

@@ -48,6 +48,13 @@ model RefreshToken {
   @@index([expiresAt])
 }
 
+enum AnalysisStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
 model Repository {
   id            String               @id @default(uuid()) @db.Uuid
   ownerId       String               @db.Uuid
@@ -60,8 +67,46 @@ model Repository {
   createdAt     DateTime             @default(now())
   updatedAt     DateTime             @updatedAt
   owner         User                 @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  analysisRuns  AnalysisRun[]
 
   @@unique([ownerId, name])
   @@index([ownerId])
   @@index([ownerId, createdAt])
 }
+
+model AnalysisRun {
+  id           String         @id @default(uuid()) @db.Uuid
+  repositoryId String         @db.Uuid
+  status       AnalysisStatus @default(PENDING)
+  totalFiles   Int            @default(0)
+  totalLines   Int            @default(0)
+  summary      Json?
+  error        String?
+  createdAt    DateTime       @default(now())
+  completedAt  DateTime?
+  repository   Repository     @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  files        AnalyzedFile[]
+
+  @@index([repositoryId])
+  @@index([repositoryId, createdAt])
+}
+
+model AnalyzedFile {
+  id            String      @id @default(uuid()) @db.Uuid
+  analysisRunId String      @db.Uuid
+  filePath      String      @db.VarChar(500)
+  language      String      @db.VarChar(50)
+  lineCount     Int         @default(0)
+  codeLineCount Int         @default(0)
+  imports       Json        @default("[]")
+  exports       Json        @default("[]")
+  symbols       Json        @default("{}")
+  dependencies  Json        @default("[]")
+  hasErrors     Boolean     @default(false)
+  analysisRun   AnalysisRun @relation(fields: [analysisRunId], references: [id], onDelete: Cascade)
+
+  @@unique([analysisRunId, filePath])
+  @@index([analysisRunId])
+  @@index([analysisRunId, language])
+}
+

@@ -4,7 +4,7 @@
 
 CodeMind AI is a professional developer platform designed to analyze repositories, perform RAG-powered codebase Q&A with citations, review code, identify issues, and generate tests and documentation.
 
-> **Phase 3 — Repository Management**: Authenticated CRUD for user repositories, unique per-owner names, deterministic pagination, metadata editing, multi-tenant isolation, and responsive light UI with modals and search.
+> **Phase 4 — Code Intelligence Engine**: Source file batch ingestion, TypeScript/JavaScript AST parsing using the TypeScript Compiler API, symbol extraction, resolved intra-repository dependency graph, persisted analysis runs, interactive dependency viewer, and file symbol inspector UI.
 
 ---
 
@@ -109,6 +109,20 @@ The test setup refuses any `TEST_DATABASE_URL` whose database name does not end 
 - Pagination supports `page`, `limit` (max 100), and `search` query parameters with deterministic ordering (`createdAt DESC, id DESC`).
 - Live frontend management under `/repositories` includes search filtering, empty states, creation modals, metadata editing, and deletion confirmation dialogs.
 - See [Repository Management API](./docs/api/repositories.md) for full endpoint contracts and payload schemas.
+
+## Code Intelligence Engine (Phase 4)
+
+- **Source File Ingestion**: Secure batch file ingestion (`POST /api/v1/repositories/:id/analysis`) supporting JavaScript and TypeScript files with limits (50 files, 150KB/file, 2MB batch).
+- **Security & Path Sanitization**: Rejects path traversal attempts (`../`), sensitive files (`.env`, `*.pem`, `*.key`), dependency folders (`node_modules`), build directories (`dist`, `build`), and binary files.
+- **AST Parsing**: Powered directly by the TypeScript Compiler API (`typescript` 5.x) without external binaries or Python dependencies. Extracts functions, methods, classes, interfaces, type aliases, imports, exports, and comments.
+- **Dependency Graph**: Resolves relative file imports (`./`, `../`) to actual repository files to construct a directed architectural dependency graph.
+- **Persistence**: Backed by PostgreSQL via Prisma (`AnalysisRun` and `AnalyzedFile` models with relational integrity and cascade cleanup on repository deletion).
+- **Frontend Intelligence Dashboard**:
+  - Overview metrics: analyzed files count, total lines of code, symbol counts, and dependency edge counts.
+  - Interactive file explorer with search, language filter, and AST symbol inspector (drilldown into functions, classes, interfaces, types).
+  - Architecture dependency graph visualizer.
+  - Ingestion modal with pre-loaded sample TypeScript architecture templates for immediate testing.
+- See [Code Intelligence API](./docs/api/intelligence.md) for endpoint documentation.
 
 ### Prisma commands
 

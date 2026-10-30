@@ -10,3 +10,22 @@ export type {
   PaginationMeta,
   PaginatedRepositories,
 } from './types/repository';
+export type {
+  AnalysisStatus,
+  CodeImport,
+  CodeExport,
+  FunctionSymbol,
+  ClassProperty,
+  ClassMethod,
+  ClassSymbol,
+  TypeSymbol,
+  FileSymbols,
+  AnalyzedFileSummary,
+  AnalyzedFileDetail,
+  AnalysisSummary,
+  AnalysisRun,
+  IngestFileInput,
+  IngestBatchInput,
+  DependencyEdge,
+  DependencyGraph,
+} from './types/intelligence';

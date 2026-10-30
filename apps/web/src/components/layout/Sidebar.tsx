@@ -20,7 +20,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { to: '/', icon: LayoutDashboard, label: 'Overview' },
-  { to: '/repositories', icon: GitBranch, label: 'Repositories', comingSoon: true },
+  { to: '/repositories', icon: GitBranch, label: 'Repositories' },
   { to: '/code-assistant', icon: MessageSquareCode, label: 'Code Assistant', comingSoon: true },
   { to: '/code-reviews', icon: GitPullRequest, label: 'Code Reviews', comingSoon: true },
   { to: '/settings', icon: Settings, label: 'Settings' },
@@ -133,7 +133,7 @@ export function Sidebar({ mobileOpen = false, onCloseMobile }: SidebarProps) {
           <div className="rounded-xl bg-surface-subtle/80 border border-slate-200/60 p-3.5 flex items-center justify-between">
             <div className="truncate">
               <p className="text-xs font-semibold text-slate-850 truncate">CodeMind Platform</p>
-              <p className="text-[11px] text-slate-500 font-mono">v0.1.0 • Phase 2</p>
+              <p className="text-[11px] text-slate-500 font-mono">v0.1.0 • Phase 4</p>
             </div>
             <div
               className="h-2 w-2 rounded-full bg-[#1E6B43] shadow-[0_0_8px_rgba(30,107,67,0.4)]"

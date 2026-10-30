@@ -14,6 +14,7 @@ import {
   ChevronRight,
   ShieldCheck,
   RefreshCw,
+  Sparkles,
 } from 'lucide-react';
 import {
   useRepositories,
@@ -23,6 +24,7 @@ import {
 } from '../hooks/useRepositories';
 import { EmptyState } from '../components/common/EmptyState';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { CodeIntelligenceView } from '../components/intelligence/CodeIntelligenceView';
 import type { Repository, RepositoryStatus } from '../types';
 
 export function Repositories() {
@@ -34,6 +36,9 @@ export function Repositories() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingRepo, setEditingRepo] = useState<Repository | null>(null);
   const [deletingRepo, setDeletingRepo] = useState<Repository | null>(null);
+  const [selectedRepoForIntelligence, setSelectedRepoForIntelligence] = useState<Repository | null>(
+    null,
+  );
 
   // Form states
   const [formName, setFormName] = useState('');
@@ -163,6 +168,15 @@ export function Repositories() {
     } catch (err) {
       setFormError(err instanceof Error ? err.message : 'Failed to delete repository');
     }
+  }
+
+  if (selectedRepoForIntelligence) {
+    return (
+      <CodeIntelligenceView
+        repository={selectedRepoForIntelligence}
+        onBack={() => setSelectedRepoForIntelligence(null)}
+      />
+    );
   }
 
   return (
@@ -362,6 +376,16 @@ export function Repositories() {
                   </div>
 
                   <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedRepoForIntelligence(repo)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-accent bg-accent-muted hover:bg-accent hover:text-white transition cursor-pointer"
+                      title="Inspect Code Intelligence"
+                      aria-label={`Inspect intelligence for ${repo.name}`}
+                    >
+                      <Sparkles className="h-3.5 w-3.5" />
+                      <span className="hidden sm:inline">Intelligence</span>
+                    </button>
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(repo)}
