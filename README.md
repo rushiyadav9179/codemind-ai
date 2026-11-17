@@ -4,7 +4,7 @@
 
 CodeMind AI is a professional developer platform designed to analyze repositories, perform RAG-powered codebase Q&A with citations, review code, identify issues, and generate tests and documentation.
 
-> **Phase 4 — Code Intelligence Engine**: Source file batch ingestion, TypeScript/JavaScript AST parsing using the TypeScript Compiler API, symbol extraction, resolved intra-repository dependency graph, persisted analysis runs, interactive dependency viewer, and file symbol inspector UI.
+> **Phase 5 — Semantic Code Search Engine**: Vector embeddings powered by pgvector and local Ollama (`nomic-embed-text`), AST symbol vectorization, cosine similarity ranking, index management, and natural-language code search interface.
 
 ---
 
@@ -123,6 +123,15 @@ The test setup refuses any `TEST_DATABASE_URL` whose database name does not end 
   - Architecture dependency graph visualizer.
   - Ingestion modal with pre-loaded sample TypeScript architecture templates for immediate testing.
 - See [Code Intelligence API](./docs/api/intelligence.md) for endpoint documentation.
+
+## Semantic Code Search Engine (Phase 5)
+
+- **Vector Persistence**: pgvector-backed `CodeEmbedding` table with 768-dimensional embeddings and IVFFlat cosine similarity index (`vector_cosine_ops`).
+- **Local Embedding Provider**: Integrates with local Ollama (`nomic-embed-text`) with zero cloud API keys, zero cost, and graceful `503 MODEL_UNAVAILABLE` fallback when Ollama is offline.
+- **Index Management**: Automatic symbol contextualization and batch vectorization for parsed AST symbols (functions, classes, interfaces, types) from the latest analysis run.
+- **Search Capabilities**: Natural-language code retrieval across repository symbols ranked by cosine similarity with contextual code snippets and location references.
+- **Frontend Search Experience**: Dedicated semantic search interface with empty states, live index triggering, clear progress indicators, Ollama configuration guides, and direct navigation to code intelligence.
+- See [Semantic Code Search API](./docs/api/search.md) for endpoint specifications and setup instructions.
 
 ### Prisma commands
 

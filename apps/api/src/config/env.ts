@@ -55,6 +55,15 @@ const envSchema = z.object({
     .default('false')
     .transform((value) => value === 'true'),
   AUTH_COOKIE_SAME_SITE: z.enum(['lax', 'strict']).default('lax'),
+  EMBEDDING_MODEL: z.string().min(1).default('nomic-embed-text'),
+  OLLAMA_BASE_URL: z
+    .string()
+    .url()
+    .default('http://localhost:11434')
+    .refine((url) => !url.endsWith('/'), {
+      message: 'OLLAMA_BASE_URL must not have a trailing slash',
+    }),
+  EMBEDDING_DIMENSION: z.coerce.number().int().positive().default(768),
 });
 
 const parsed = envSchema

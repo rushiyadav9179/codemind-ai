@@ -29,3 +29,4 @@ export type {
   DependencyEdge,
   DependencyGraph,
 } from './types/intelligence';
+export type { IndexStatus, SearchResult } from './types/search';

@@ -28,3 +28,4 @@ export type {
   DependencyEdge,
   DependencyGraph,
 } from '@codemind/shared';
+export type { IndexStatus, SearchResult } from '@codemind/shared';

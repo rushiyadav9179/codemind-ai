@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { repositoryController } from '../../controllers/repository.controller';
 import { analysisController } from '../../controllers/analysis.controller';
+import { searchController } from '../../controllers/search.controller';
 import { requireAuth } from '../../middleware/auth';
 
 const router = Router();
@@ -25,5 +26,10 @@ router.get('/:id/analysis/:analysisId', analysisController.getRunById);
 router.get('/:id/analysis/:analysisId/files', analysisController.listFiles);
 router.get('/:id/analysis/:analysisId/files/:fileId', analysisController.getFileDetail);
 router.get('/:id/analysis/:analysisId/dependencies', analysisController.getDependencyGraph);
+
+// Semantic Search Engine (Phase 5)
+router.post('/:id/search/index', searchController.indexRepository);
+router.get('/:id/search/status', searchController.getIndexStatus);
+router.get('/:id/search/query', searchController.search);
 
 export default router;

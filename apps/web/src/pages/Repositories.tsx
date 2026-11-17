@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   RefreshCw,
   Sparkles,
+  TextSearch,
 } from 'lucide-react';
 import {
   useRepositories,
@@ -25,6 +26,7 @@ import {
 import { EmptyState } from '../components/common/EmptyState';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { CodeIntelligenceView } from '../components/intelligence/CodeIntelligenceView';
+import { SemanticSearchView } from '../components/search/SemanticSearchView';
 import type { Repository, RepositoryStatus } from '../types';
 
 export function Repositories() {
@@ -39,6 +41,7 @@ export function Repositories() {
   const [selectedRepoForIntelligence, setSelectedRepoForIntelligence] = useState<Repository | null>(
     null,
   );
+  const [selectedRepoForSearch, setSelectedRepoForSearch] = useState<Repository | null>(null);
 
   // Form states
   const [formName, setFormName] = useState('');
@@ -168,6 +171,15 @@ export function Repositories() {
     } catch (err) {
       setFormError(err instanceof Error ? err.message : 'Failed to delete repository');
     }
+  }
+
+  if (selectedRepoForSearch) {
+    return (
+      <SemanticSearchView
+        repository={selectedRepoForSearch}
+        onBack={() => setSelectedRepoForSearch(null)}
+      />
+    );
   }
 
   if (selectedRepoForIntelligence) {
@@ -376,6 +388,16 @@ export function Repositories() {
                   </div>
 
                   <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedRepoForSearch(repo)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-violet-700 bg-violet-50 hover:bg-violet-600 hover:text-white transition cursor-pointer"
+                      title="Semantic Code Search"
+                      aria-label={`Semantic search for ${repo.name}`}
+                    >
+                      <TextSearch className="h-3.5 w-3.5" />
+                      <span className="hidden sm:inline">Search</span>
+                    </button>
                     <button
                       type="button"
                       onClick={() => setSelectedRepoForIntelligence(repo)}
